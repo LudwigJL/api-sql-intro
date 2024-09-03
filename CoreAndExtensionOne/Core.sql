@@ -10,7 +10,6 @@ unique(title)
 
 );
 
-
 INSERT INTO films
     (title, genre, release_year, score)
 VALUES
@@ -72,5 +71,68 @@ SELECT * FROM films WHERE genre = 'Western' AND release_year >= 2000;
 --films that have the world "Matrix" in their title
 SELECT * FROM films WHERE title LIKE '%Matrix%';
 
+-- EXTENSION ONE
 
+-- Return the average film rating
+SELECT AVG(score) FROM films;
+
+-- Return the total number of films
+SELECT COUNT(id) FROM films;
+
+-- Return the average film rating by genre
+SELECT AVG(score) FROM films WHERE genre = 'Western';
+
+-- EXTENSION TWO
+
+CREATE TABLE IF NOT EXISTS directors (
+    directorId SERIAL PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+INSERT INTO directors(name)
+VALUES
+('Petter Stordalen'),
+('Fredrik Schiller'),
+('Felix Herngren'),
+('Bill Gates');
+
+-- drop table for new insert
+DROP TABLE films;
+
+CREATE TABLE IF NOT EXISTS films (
+id SERIAL PRIMARY KEY,
+title text not null,
+genre text not null,
+release_year integer not null,
+score integer not null,
+directorId integer not null,
+
+unique(title)
+
+);
+
+INSERT INTO films
+    (title, genre, release_year, score, directorId)
+VALUES
+    ('The Shawshank Redemption', 'Drama', 1994, 9, 2),
+    ('The Godfather', 'Crime', 1972, 9, 1),
+    ('The Dark Knight', 'Action', 2008, 9, 1),
+    ('Alien', 'SciFi', 1979, 9, 2),
+    ('Total Recall', 'SciFi', 1990, 8, 4),
+    ('The Matrix', 'SciFi', 1999, 8, 3),
+    ('The Matrix Resurrections', 'SciFi', 2021, 5, 4),
+    ('The Matrix Reloaded', 'SciFi', 2003, 6, 2),
+    ('The Hunt for Red October', 'Thriller', 1990, 7, 1),
+    ('Misery', 'Thriller', 1990, 7, 1),
+    ('The Power Of The Dog', 'Western', 2021, 6, 3),
+    ('Hell or High Water', 'Western', 2016, 8, 3),
+    ('The Good the Bad and the Ugly', 'Western', 1966, 9, 2),
+    ('Unforgiven', 'Western', 1992, 7, 2);
+
+-- QUERY
+SELECT * FROM films
+INNER JOIN directors ON films.directorid=directors.directorid
+
+-- EXTENSION 3
+SELECT directors.name, count(*) FROM films INNER JOIN directors on directors.directorid = films.directorId GROUP BY directors.directorid;
 
